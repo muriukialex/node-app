@@ -17,17 +17,17 @@ httpServer.listen(config.httpPort, () => {
 })
 
 const httpsServerOptions = {
-    'key': fs.readFileSync("./https/key.pem"),
-    'cert': fs.readFileSync("./https/cert.pem")
+  key: fs.readFileSync("./https/key.pem"),
+  cert: fs.readFileSync("./https/cert.pem"),
 }
 
-const httpsServer = https.createServer(httpsServerOptions, (req, res)=>{
-    unifiedServer(req, res)
+const httpsServer = https.createServer(httpsServerOptions, (req, res) => {
+  unifiedServer(req, res)
 })
 
-httpsServer.listen(config.httpsPort, ()=>{
-    console.log(`HTTPS Server is running on port: ${config.httpsPort}`)
-}))
+httpsServer.listen(config.httpsPort, () => {
+  console.log(`HTTPS Server is running on port: ${config.httpsPort}`)
+})
 
 const unifiedServer = (req, res) => {
   //get the url and parse
