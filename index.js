@@ -1,8 +1,35 @@
 const http = require("http")
+const https = require("https")
 const url = require("url")
 const StringDecoder = require("string_decoder").StringDecoder
+const config = require("./config")
 
-const server = http.createServer((req, res) => {
+const fs = require("fs")
+
+const httpServer = http.createServer((req, res) => {
+  unifiedServer(req, res)
+})
+
+httpServer.listen(config.httpPort, () => {
+  console.log(
+    `HTTP Server listening on PORT: ${config.httpPort} in ${config.envName}`
+  )
+})
+
+const httpsServerOptions = {
+    'key': fs.readFileSync("./https/key.pem"),
+    'cert': fs.readFileSync("./https/cert.pem")
+}
+
+const httpsServer = https.createServer(httpsServerOptions, (req, res)=>{
+    unifiedServer(req, res)
+})
+
+httpsServer.listen(config.httpsPort, ()=>{
+    console.log(`HTTPS Server is running on port: ${config.httpsPort}`)
+}))
+
+const unifiedServer = (req, res) => {
   //get the url and parse
   const parsedUrl = url.parse(req.url, true)
 
@@ -57,11 +84,7 @@ const server = http.createServer((req, res) => {
       )
     })
   })
-})
-
-server.listen(9000, () => {
-  console.log(`Server listening on PORT: 9000`)
-})
+}
 
 const handlers = {}
 
